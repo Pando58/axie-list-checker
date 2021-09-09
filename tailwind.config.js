@@ -10,6 +10,9 @@ module.exports = {
           'Inter',
           ...defaultTheme.fontFamily.sans,
         ]
+      },
+      minWidth: {
+        '3ch': '3ch'
       }
     }
   },
