@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { getData } from '@/scripts/apiCheck.js'
 
 export default {
@@ -60,11 +60,17 @@ export default {
     const timer = computed(() => parseInt(timerSelect.value));
     const timerSelect = ref('2000');
 
-    const axies = getData();
+    const axies = ref(null);
 
     const getETH = (eth) => {
       return (eth / Math.pow(10, 18)).toFixed(3);
     }
+
+    onMounted(() => {
+      getData((data) => {
+        axies.value = data;
+      });
+    });
 
     return { toggle, timer, timerSelect, axies, getETH };
   },

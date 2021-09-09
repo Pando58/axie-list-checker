@@ -1,9 +1,7 @@
 import { ref } from 'vue'
 import axios from 'axios'
 
-const getData = () => {
-  const response = ref(null);
-
+const getData = async (fn) => {
   axios.post('https://graphql-gateway.axieinfinity.com/graphql', {
     operationName: "GetAxieLatest",
     variables: {
@@ -40,10 +38,8 @@ const getData = () => {
       }
     `
   })
-  .then(res => response.value = res.data.data.axies.results)
+  .then(res => fn(res.data.data.axies.results))
   .catch(err => console.error(err));
-
-  return response;
 };
 
 export { getData };
