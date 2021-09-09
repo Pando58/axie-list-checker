@@ -39,20 +39,20 @@
         <div class="flex-none w-2/12">ETH</div>
         <div class="flex-none w-2/12">USD</div>
       </li>
-      <li class="px-4 py-3 text-sm font-medium text-gray-500 flex">
-        <div class="flex-none w-1/12">1</div>
-        <div class="flex-1">#792846</div>
-        <div class="flex-none w-2/12">0.056</div>
-        <div class="flex-none w-2/12">$195.56</div>
+      <li class="px-4 py-3 text-sm font-medium text-gray-500 flex" v-for="(axie, index) in axies" v-bind:key="axie.id">
+        <div class="flex-none w-1/12">{{ index + 1 }}</div>
+        <div class="flex-1">#{{ axie.id }}</div>
+        <div class="flex-none w-2/12">{{ getETH(axie.auction.currentPrice) }}</div>
+        <div class="flex-none w-2/12">${{ axie.auction.currentPriceUSD }}</div>
       </li>
     </ul>
-
 
   </div>
 </template>
 
 <script>
 import { ref, computed } from 'vue'
+import { getData } from '@/scripts/apiCheck.js'
 
 export default {
   setup() {
@@ -60,7 +60,13 @@ export default {
     const timer = computed(() => parseInt(timerSelect.value));
     const timerSelect = ref('2000');
 
-    return { toggle, timer, timerSelect };
+    const axies = getData();
+
+    const getETH = (eth) => {
+      return (eth / Math.pow(10, 18)).toFixed(3);
+    }
+
+    return { toggle, timer, timerSelect, axies, getETH };
   },
 }
 </script>
