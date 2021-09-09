@@ -16,9 +16,12 @@
     </div>
 
     <!-- Timer -->
-    <div class="w-20 mb-12">
-      <div class="relative">
-        <select v-model="timerSelect" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 text-sm py-2 px-2 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
+    <div class="mb-12">
+      <label class="block uppercase text-gray-700 text-xs font-bold mb-2" for="timer-select">
+        Refresh rate
+      </label>
+      <div class="relative w-20">
+        <select v-model="timerSelect" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 text-sm py-2 px-2 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="timer-select">
           <option value="1000">1s</option>
           <option value="2000">2s</option>
           <option value="3000">3s</option>
