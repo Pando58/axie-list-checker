@@ -4,25 +4,7 @@
     <h1 class="font-bold text-xl text-center mb-4 opacity-0">-</h1>
 
     <!-- Toggle switch -->
-    <div class="flex items-center mb-4">
-      <label
-        class="flex items-center cursor-pointer"
-        for="toggle"
-      >
-        <div class="relative">
-          <input
-            id="toggle"
-            class="sr-only"
-            type="checkbox"
-            v-model="toggle"
-            @change="toggleTimer"
-          />
-          <div class="line w-14 h-8 bg-gray-300 rounded-full shadow-inner transition duration-300"></div>
-          <div class="dot absolute w-6 h-6 bg-white rounded-full shadow left-1 top-1 transition duration-300"></div>
-        </div>
-        <div class="ml-2 text-sm font-medium text-gray-500 min-w-3ch"> {{ toggle ? 'ON' : 'OFF' }} </div>
-      </label>
-    </div>
+    <Switch :value="toggle" @onChange="toggleSwitch"></Switch>
 
     <!-- Timer -->
     <div class="mb-4">
@@ -121,8 +103,12 @@
 <script>
 import { ref, computed, onMounted } from 'vue'
 import { getData } from '@/scripts/apiCheck.js'
+import Switch from '@/components/Switch.vue'
 
 export default {
+  components: {
+    Switch
+  },
   setup() {
     const toggle = ref(false);
     const timerSelect = ref('2000');
@@ -167,6 +153,11 @@ export default {
       });
     }
 
+    const toggleSwitch = (e, val) => {
+      toggle.value = val;
+      toggleTimer();
+    }
+
     onMounted(() => {
       updateList();
     });
@@ -182,20 +173,10 @@ export default {
       stopTimer,
       toggleTimer,
       resetTimer,
-      getETH
+      getETH,
+      updateList,
+      toggleSwitch
     };
   },
 }
 </script>
-
-<style scoped>
-
-#toggle:checked ~ .dot {
-  @apply transform translate-x-full;
-}
-
-#toggle:checked ~ .line {
-  @apply bg-green-400;
-}
-
-</style>
