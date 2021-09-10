@@ -26,10 +26,10 @@
 
 <script>
 export default {
-  props: {
-    label: String,
-    options: Array,
-    selected: Number
-  }
+  props: [
+    'label',
+    'options',
+    'selected'
+  ]
 }
 </script>
