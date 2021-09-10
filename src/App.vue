@@ -4,40 +4,21 @@
     <h1 class="font-bold text-xl text-center mb-4 opacity-0">-</h1>
 
     <!-- Toggle switch -->
-    <Switch :value="toggle" @onChange="toggleSwitch"></Switch>
+    <Switch :value="toggle" @onChange="changeToggle"></Switch>
 
     <!-- Timer -->
-    <div class="mb-4">
-      <label
-        class="block uppercase text-gray-700 text-xs font-bold mb-2"
-        for="timer-select"
-      >
-        Refresh rate
-      </label>
-      <div class="relative w-20">
-        <select
-          id="timer-select"
-          class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 text-sm py-2 px-2 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-          v-model="timerSelect"
-          @change="resetTimer"
-        >
-          <option value="1000">1s</option>
-          <option value="2000">2s</option>
-          <option value="3000">3s</option>
-          <option value="4000">4s</option>
-          <option value="5000">5s</option>
-        </select>
-        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-          <svg
-            class="fill-current h-4 w-4"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-          >
-            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-          </svg>
-        </div>
-      </div>
-    </div>
+    <Select 
+      label="Refresh rate"
+      :options="[
+        { value: 1000, name: '1s' },
+        { value: 2000, name: '2s' },
+        { value: 3000, name: '3s' },
+        { value: 4000, name: '4s' },
+        { value: 5000, name: '5s' },
+      ]"
+      :selected="2000"
+      @onChange="changeRefreshRate"
+    ></Select>
 
     <!-- Sort -->
     <div class="mb-4">
@@ -101,22 +82,22 @@
 </template>
 
 <script>
-import { ref, computed, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { getData } from '@/scripts/apiCheck.js'
 import Switch from '@/components/Switch.vue'
+import Select from '@/components/Select.vue'
 
 export default {
   components: {
-    Switch
+    Switch,
+    Select
   },
   setup() {
     const toggle = ref(false);
-    const timerSelect = ref('2000');
+    const timer = ref(2000);
     const sort = ref('newest');
     const interval = ref(null);
     const axies = ref(null);
-
-    const timer = computed(() => parseInt(timerSelect.value));
 
     const startTimer = () => {
       interval.value = setInterval(updateList, timer.value);
@@ -153,9 +134,14 @@ export default {
       });
     }
 
-    const toggleSwitch = (e, val) => {
+    const changeToggle = (e, val) => {
       toggle.value = val;
       toggleTimer();
+    }
+
+    const changeRefreshRate = (e, val) => {
+      timer.value = val;
+      resetTimer();
     }
 
     onMounted(() => {
@@ -164,18 +150,18 @@ export default {
 
     return {
       toggle,
-      timerSelect,
+      timer,
       sort,
       interval,
       axies,
-      timer,
       startTimer,
       stopTimer,
       toggleTimer,
       resetTimer,
       getETH,
       updateList,
-      toggleSwitch
+      changeToggle,
+      changeRefreshRate
     };
   },
 }
