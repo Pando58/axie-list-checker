@@ -33,7 +33,10 @@
         v-for="(axie, index) in axies"
         v-bind:key="axie.id"
       >
-        <div class="flex-none w-1/12">{{ index + 1 }}</div>
+        <div class="flex-none w-1/12 flex items-center">
+          <input type="checkbox" class="mr-2" v-model="axie.viewed" @change="setViewedAxie($event, axie.id)">
+          <span>{{ index + 1 }}</span>
+        </div>
         <div class="flex-1">
           <a
             class="hover:text-green-500 transition"
@@ -99,8 +102,27 @@ export default {
 
     const updateList = () => {
       getData((data) => {
+        data.forEach(axie => {
+          if (Number(axie.auction.currentPriceUSD) <= 30) {
+            if (!localStorage.getItem(`#${axie.id}`)) {
+              alert(`#${axie.id} on $${axie.auction.currentPriceUSD} USD`);
+              localStorage.setItem(`#${axie.id}`, true);
+            }
+
+            axie.viewed = true;
+          }
+        });
+        
         axies.value = data;
       });
+    }
+
+    const setViewedAxie = (e, axieID) => {
+      if (e.target.checked) {
+        localStorage.setItem(`#${axieID}`, true);
+      } else {
+        localStorage.removeItem(`#${axieID}`);
+      }
     }
 
     const changeToggle = (e, val) => {
@@ -128,6 +150,7 @@ export default {
       resetTimer,
       getETH,
       updateList,
+      setViewedAxie,
       changeToggle,
       changeRefreshRate,
     };
