@@ -20,17 +20,6 @@
       @onChange="changeRefreshRate"
     ></Select>
 
-    <!-- Sort -->
-    <Select 
-      label="Sort by"
-      :options="[
-        { value: 'newest', name: 'Newest' },
-        { value: 'lowPrice', name: 'Low price' }
-      ]"
-      :selected="sort"
-      @onChange="changeSort"
-    ></Select>
-
     <!-- Table -->
     <ul class="mt-12 rounded-lg shadow overflow-hidden border-b border-gray-200 divide-y divide-gray-200">
       <li class="bg-gray-50 px-4 py-3 text-sm font-medium text-gray-500 uppercase flex">
@@ -76,7 +65,6 @@ export default {
   setup() {
     const toggle = ref(false);
     const timer = ref(2000);
-    const sort = ref('newest');
     const interval = ref(null);
     const axies = ref(null);
 
@@ -125,11 +113,6 @@ export default {
       resetTimer();
     }
 
-    const changeSort = (e, val) => {
-      sort.value = val;
-      resetTimer();
-    }
-
     onMounted(() => {
       updateList();
     });
@@ -137,7 +120,6 @@ export default {
     return {
       toggle,
       timer,
-      sort,
       interval,
       axies,
       startTimer,
@@ -148,7 +130,6 @@ export default {
       updateList,
       changeToggle,
       changeRefreshRate,
-      changeSort
     };
   },
 }
