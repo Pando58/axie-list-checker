@@ -20,8 +20,13 @@
       @onChange="changeRefreshRate"
     ></Select>
 
+    <!-- Spin loader -->
+    <div class="flex justify-center">
+      <SpinLoader ref="spinLoader"></SpinLoader>
+    </div>
+
     <!-- Table -->
-    <ul class="mt-12 rounded-lg shadow overflow-hidden border-b border-gray-200 divide-y divide-gray-200">
+    <ul class="mt-2 rounded-lg shadow overflow-hidden border-b border-gray-200 divide-y divide-gray-200">
       <li class="bg-gray-50 px-4 py-3 text-sm font-medium text-gray-500 uppercase flex">
         <div class="flex-none w-1/12">-</div>
         <div class="flex-1">ID</div>
@@ -59,17 +64,21 @@ import { ref, onMounted } from 'vue'
 import { getData } from '@/scripts/apiCheck.js'
 import Switch from '@/components/Switch.vue'
 import Select from '@/components/Select.vue'
+import SpinLoader from '@/components/SpinLoader.vue'
 
 export default {
   components: {
     Switch,
-    Select
+    Select,
+    SpinLoader
   },
   setup() {
     const toggle = ref(false);
     const timer = ref(2000);
     const interval = ref(null);
     const axies = ref(null);
+
+    const spinLoader = ref(null);
 
     const startTimer = () => {
       interval.value = setInterval(updateList, timer.value);
@@ -101,6 +110,8 @@ export default {
     }
 
     const updateList = () => {
+      spinLoader.value.show();
+
       getData((data) => {
         data.forEach(axie => {
           if (Number(axie.auction.currentPriceUSD) <= 30) {
@@ -114,6 +125,7 @@ export default {
         });
         
         axies.value = data;
+        spinLoader.value.hide();
       });
     }
 
@@ -144,6 +156,7 @@ export default {
       timer,
       interval,
       axies,
+      spinLoader,
       startTimer,
       stopTimer,
       toggleTimer,
