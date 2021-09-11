@@ -20,6 +20,17 @@
       @onChange="changeRefreshRate"
     ></Select>
 
+    <!-- Sort -->
+    <Select 
+      label="Sort by"
+      :options="[
+        { value: 'latest', name: 'Latest' },
+        { value: 'lowestPrice', name: 'Lowest price' },
+      ]"
+      :selected="sort"
+      @onChange="changeSort"
+    ></Select>
+
     <!-- Notification price -->
     <InputNumber
       label="Alert max price (USD)"
@@ -96,6 +107,7 @@ export default {
   setup() {
     const toggle = ref(false);
     const timer = ref(2000);
+    const sort = ref('latest');
     const price = ref(localStorage.getItem('price') || 30);
     const interval = ref(null);
     const axies = ref(null);
@@ -134,7 +146,7 @@ export default {
     const updateList = () => {
       spinLoader.value.show();
 
-      getData((data) => {
+      getData(sort.value, (data) => {
         data.forEach(axie => {
           if (Number(axie.auction.currentPriceUSD) <= price.value) {
             if (!localStorage.getItem(`#${axie.id}`)) {
@@ -169,9 +181,15 @@ export default {
       resetTimer();
     }
 
+    const changeSort = (e, val) => {
+      sort.value = val;
+      resetTimer();
+    }
+
     const changePrice = (e, val) => {
       price.value = val;
       localStorage.setItem('price', val);
+      resetTimer();
     }
 
     onMounted(() => {
@@ -181,6 +199,7 @@ export default {
     return {
       toggle,
       timer,
+      sort,
       price,
       interval,
       axies,
@@ -194,6 +213,7 @@ export default {
       setViewedAxie,
       changeToggle,
       changeRefreshRate,
+      changeSort,
       changePrice,
     };
   },

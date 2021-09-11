@@ -3,7 +3,7 @@
     <label class="block uppercase text-gray-700 text-xs font-bold mb-2">
       {{ label }}
     </label>
-    <div class="relative w-20">
+    <div class="relative w-24">
       <select
         class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 text-sm py-2 px-2 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
         v-model="selected"
