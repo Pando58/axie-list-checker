@@ -20,6 +20,16 @@
       @onChange="changeRefreshRate"
     ></Select>
 
+    <!-- Notification price -->
+    <InputNumber
+      label="Alert max price (USD)"
+      :min="0"
+      :max="200"
+      :step="5"
+      :val="price"
+      @onChange="changePrice"
+    ></InputNumber>
+
     <!-- Spin loader -->
     <div class="flex justify-center">
       <SpinLoader ref="spinLoader"></SpinLoader>
@@ -64,17 +74,20 @@ import { ref, onMounted } from 'vue'
 import { getData } from '@/scripts/apiCheck.js'
 import Switch from '@/components/Switch.vue'
 import Select from '@/components/Select.vue'
+import InputNumber from '@/components/InputNumber.vue'
 import SpinLoader from '@/components/SpinLoader.vue'
 
 export default {
   components: {
     Switch,
     Select,
+    InputNumber,
     SpinLoader
   },
   setup() {
     const toggle = ref(false);
     const timer = ref(2000);
+    const price = ref(localStorage.getItem('price') || 30);
     const interval = ref(null);
     const axies = ref(null);
 
@@ -114,7 +127,7 @@ export default {
 
       getData((data) => {
         data.forEach(axie => {
-          if (Number(axie.auction.currentPriceUSD) <= 30) {
+          if (Number(axie.auction.currentPriceUSD) <= price.value) {
             if (!localStorage.getItem(`#${axie.id}`)) {
               alert(`#${axie.id} on $${axie.auction.currentPriceUSD} USD`);
               localStorage.setItem(`#${axie.id}`, true);
@@ -147,6 +160,11 @@ export default {
       resetTimer();
     }
 
+    const changePrice = (e, val) => {
+      price.value = val;
+      localStorage.setItem('price', val);
+    }
+
     onMounted(() => {
       updateList();
     });
@@ -154,6 +172,7 @@ export default {
     return {
       toggle,
       timer,
+      price,
       interval,
       axies,
       spinLoader,
@@ -166,6 +185,7 @@ export default {
       setViewedAxie,
       changeToggle,
       changeRefreshRate,
+      changePrice,
     };
   },
 }
