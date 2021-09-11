@@ -44,13 +44,15 @@
         <div class="flex-none w-2/12">USD</div>
       </li>
       <li
-        class="px-4 py-3 text-sm font-medium text-gray-500 flex"
+        class="px-4 py-3 text-sm font-medium text-gray-500 flex h-20"
         v-for="(axie, index) in axies"
         v-bind:key="axie.id"
       >
-        <div class="flex-none w-1/12 flex items-center">
-          <input type="checkbox" class="mr-2" v-model="axie.viewed" @change="setViewedAxie($event, axie.id)">
-          <span>{{ index + 1 }}</span>
+        <div class="flex-none w-1/12">
+          <div class="flex items-center">
+            <input type="checkbox" class="mr-2" v-model="axie.viewed" @change="setViewedAxie($event, axie.id)">
+            <span>{{ index + 1 }}</span>
+          </div>
         </div>
         <div class="flex-1">
           <a
@@ -60,6 +62,13 @@
           >
             #{{ axie.id }}
           </a>
+        </div>
+        <div class="flex-none w-2/12">
+          <img
+            class="w-full h-full object-cover"
+            :src="axie.image"
+            :alt="`#${axie.id}`"
+          >
         </div>
         <div class="flex-none w-2/12">{{ getETH(axie.auction.currentPrice) }}</div>
         <div class="flex-none w-2/12">${{ axie.auction.currentPriceUSD }}</div>
